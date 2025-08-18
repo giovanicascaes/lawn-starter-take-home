@@ -82,13 +82,19 @@ lawn-starter-take-home/
 
 ### Option 2: Docker Development
 
-1. **Build and start all services**
+1. **Production mode (optimized builds)**
    ```bash
    npm run docker:build
-   npm run docker:up
+   npm run docker:up:prod
    ```
 
-2. **Stop services**
+2. **Development mode (with hot reload)**
+   ```bash
+   npm run docker:build:dev
+   npm run docker:up:dev
+   ```
+
+3. **Stop services**
    ```bash
    npm run docker:down
    ```
@@ -168,8 +174,11 @@ docker-compose logs -f [service-name]
 | `npm run dev:backend` | Start only backend |
 | `npm run build` | Build both frontend and backend |
 | `npm run start` | Start backend in production mode |
-| `npm run docker:build` | Build Docker images |
-| `npm run docker:up` | Start Docker services |
+| `npm run docker:build` | Build Docker images for production |
+| `npm run docker:build:dev` | Build Docker images for development |
+| `npm run docker:up` | Start Docker services in foreground |
+| `npm run docker:up:prod` | Start Docker services in production mode (detached) |
+| `npm run docker:up:dev` | Start Docker services in development mode (with hot reload) |
 | `npm run docker:down` | Stop Docker services |
 
 ## 🔍 Troubleshooting

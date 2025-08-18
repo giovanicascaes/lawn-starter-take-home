@@ -1,0 +1,23 @@
+
+
+services:
+  frontend:
+    build:
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./packages/frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+
+  backend:
+    build:
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./packages/backend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
