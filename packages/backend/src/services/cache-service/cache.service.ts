@@ -1,11 +1,18 @@
 import NodeCache from 'node-cache';
-import type { CacheConfig } from '../types/index.js';
+import type { ICacheConfig } from '../../index.types';
+import type { ICacheService } from './cache-service.types';
 
-export class CacheService {
+export class CacheService implements ICacheService {
   private cache: NodeCache;
 
-  constructor(config: CacheConfig = { ttl: 300, checkperiod: 600 }) {
+  constructor(config: ICacheConfig = { ttl: 300, checkperiod: 600 }) {
     this.cache = new NodeCache(config);
+  }
+  del(key: string): void {
+    throw new Error('Method not implemented.');
+  }
+  flushAll(): void {
+    throw new Error('Method not implemented.');
   }
 
   /**
@@ -44,6 +51,20 @@ export class CacheService {
    */
   clear(): void {
     this.cache.flushAll();
+  }
+
+  /**
+   * Clear by pattern
+   */
+  clearBy(pattern?: string): void {
+    if (pattern) {
+      const keys = this.getKeys().filter(key => key.includes(pattern));
+      keys.forEach(key => this.delete(key));
+      console.log(`Cleared cache for pattern: ${pattern}`);
+    } else {
+      this.clear();
+      console.log('Cleared all cache');
+    }
   }
 
   /**
