@@ -150,7 +150,7 @@ export default function Home() {
           </span>
           <ListSeparator />
           <div className="flex flex-1 flex-col items-center">
-            {data?.length ? (
+            {fetcher.state === 'idle' && data?.length ? (
               <ul className="w-full">
                 {data.map(item => (
                   <li key={item.id} className="flex flex-col">
