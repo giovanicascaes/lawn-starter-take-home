@@ -8,9 +8,11 @@ export class CacheService implements ICacheService {
   constructor(config: ICacheConfig = { ttl: 300, checkperiod: 600 }) {
     this.cache = new NodeCache(config);
   }
+
   del(key: string): void {
     throw new Error('Method not implemented.');
   }
+
   flushAll(): void {
     throw new Error('Method not implemented.');
   }

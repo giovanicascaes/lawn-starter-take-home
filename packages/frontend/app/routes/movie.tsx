@@ -6,7 +6,7 @@ import ResourceDetails, {
 import { getProvider } from '~/services/provider/provider.context';
 import type { Route } from './+types/movie';
 
-export async function loader({ request, params }: Route.LoaderArgs) {
+export async function loader({ params }: Route.LoaderArgs) {
   const movie = await getProvider().movie.getOneById(Number(params.id));
   return movie;
 }

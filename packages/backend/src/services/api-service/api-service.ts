@@ -8,14 +8,14 @@ import {
   UnauthorizedError,
   ValidationError,
 } from '../../middleware/error-interceptor/error-interceptor';
-import { CacheService } from '../cache-service/cache.service';
+import type { ICacheService } from '../cache-service/cache-service.types';
 import type { IApiService } from './api-service.types';
 
 export class ApiService implements IApiService {
   private readonly client: AxiosInstance;
-  private readonly cache: CacheService;
+  private readonly cache: ICacheService;
 
-  constructor(client: AxiosInstance, cache: CacheService) {
+  constructor(client: AxiosInstance, cache: ICacheService) {
     this.client = client;
     this.cache = cache;
   }

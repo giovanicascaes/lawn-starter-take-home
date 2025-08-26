@@ -9,4 +9,7 @@ export interface ICacheService {
     misses: number;
     keys: number;
   };
+  getKeys(): string[];
+  clear(): void;
+  clearBy(pattern?: string): void;
 }

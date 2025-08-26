@@ -9,7 +9,7 @@ import type { Route } from './+types/people';
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'People' }];
 }
-export async function loader({ request, params }: Route.LoaderArgs) {
+export async function loader({ params }: Route.LoaderArgs) {
   const people = await getProvider().people.getOneById(Number(params.id));
   return people;
 }

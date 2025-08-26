@@ -2,12 +2,11 @@ import type { Request, Response } from 'express';
 import { Router } from 'express';
 import type { IApiResponse } from '../index.types';
 import { CustomError } from '../middleware/error-interceptor/error-interceptor';
-import { ApiProvider } from '../services/api-provider';
-import { CacheService } from '../services/cache-service/cache.service';
+import type { IApiProvider } from '../services/api-provider.types';
+import type { ICacheService } from '../services/cache-service/cache-service.types';
 
 export function createApiRouter(
-  apiProvider: ApiProvider,
-  cacheService: CacheService
+  cacheService: ICacheService,
 ): Router {
   const router = Router();
 
