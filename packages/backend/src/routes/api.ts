@@ -2,13 +2,20 @@ import type { Request, Response } from 'express';
 import { Router } from 'express';
 import type { IApiResponse } from '../index.types';
 import { CustomError } from '../middleware/error-interceptor/error-interceptor';
+import { createRequestTracker } from '../middleware/request-tracker/request-tracker';
 import type { IApiProvider } from '../services/api-provider.types';
 import type { ICacheService } from '../services/cache-service/cache-service.types';
+import type { IStatisticsService } from '../services/statistics-service/statistics.types';
 
 export function createApiRouter(
+  apiProvider: IApiProvider,
   cacheService: ICacheService,
+  statisticsService: IStatisticsService
 ): Router {
   const router = Router();
+
+  // Apply request tracking middleware to all routes
+  router.use(createRequestTracker(statisticsService));
 
   // Health check endpoint
   router.get('/health', async (req: Request, res: Response<IApiResponse>) => {
@@ -94,6 +101,18 @@ export function createApiRouter(
         message: pattern
           ? `Cache cleared for pattern: ${pattern}`
           : 'All cache cleared',
+      });
+    }
+  );
+
+  // Statistics endpoint
+  router.get(
+    '/statistics',
+    async (_req: Request, res: Response<IApiResponse>) => {
+      res.json({
+        success: true,
+        data: statisticsService.getTopRequests(),
+        message: 'Top 5 requests statistics retrieved',
       });
     }
   );

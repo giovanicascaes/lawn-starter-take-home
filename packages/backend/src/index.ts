@@ -13,6 +13,7 @@ import {
 import { createApiRouter } from './routes/api';
 import { ApiProvider } from './services/api-provider';
 import { CacheService } from './services/cache-service/cache.service';
+import { StatisticsService } from './services/statistics-service/statistics.service';
 
 // Load environment variables
 dotenv.config();
@@ -41,6 +42,7 @@ const cacheService = new CacheService({
   checkperiod: 600, // Check every 10 minutes
 });
 
+const statisticsService = new StatisticsService();
 const apiProvider = new ApiProvider(swApiConfig, cacheService);
 
 // Create Express app
@@ -55,7 +57,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Routes
-app.use('/api', createApiRouter(apiProvider, cacheService));
+app.use('/api', createApiRouter(apiProvider, cacheService, statisticsService));
 
 // Root endpoint
 app.get('/', (req, res) => {
@@ -70,6 +72,7 @@ app.get('/', (req, res) => {
       moviesById: '/api/movies/:id',
       cacheStats: '/api/cache/stats',
       clearCache: '/api/cache/clear',
+      statistics: '/api/statistics',
       demoErrors: '/api/demo/error/:type',
     },
   });
@@ -87,6 +90,7 @@ app.listen(serverConfig.port, serverConfig.host, () => {
     `🚀 Backend server running on http://${serverConfig.host}:${serverConfig.port}`
   );
   console.log(`📊 Cache service initialized with TTL: 300s`);
+  console.log(`📈 Statistics service initialized with 5-minute recomputation`);
   console.log(`🌐 CORS enabled for origin: ${serverConfig.cors.origin}`);
   console.log(`🔗 Star Wars API: ${swApiConfig.baseUrl}`);
 });
