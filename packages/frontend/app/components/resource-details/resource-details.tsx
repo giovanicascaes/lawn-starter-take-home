@@ -1,7 +1,7 @@
 import { twMerge } from 'tailwind-merge';
 import ContentCard from '~/components/content-card/content-card';
 import ListSeparator from '~/components/list-separator/list-separator';
-import ClientNavLink from '../client-nav-link/client-nav-link';
+import LinkButton from '../link-button/link-button';
 
 export function ResourceDetailsItem({
   title,
@@ -32,9 +32,9 @@ export default function ResourceDetails({
     <ContentCard className="p-[15px] min-h-[159px]">
       <h1 className="font-bold text-black text-[9px] m-[0_0_15px]">{title}</h1>
       {children}
-      <ClientNavLink to="/" className="mt-[15px] w-fit">
+      <LinkButton to="/" className="mt-[15px] w-fit">
         BACK TO SEARCH
-      </ClientNavLink>
+      </LinkButton>
     </ContentCard>
   );
 }

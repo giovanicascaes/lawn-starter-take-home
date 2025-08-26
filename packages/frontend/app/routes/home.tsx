@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { useFetcher, useLoaderData } from 'react-router';
 import Button from '~/components/button/button';
-import ClientNavLink from '~/components/client-nav-link/client-nav-link';
 import ContentCard from '~/components/content-card/content-card';
 import Input from '~/components/input/input';
+import LinkButton from '~/components/link-button/link-button';
 import ListSeparator from '~/components/list-separator/list-separator';
 import type { IListItem } from '~/entities/shared.types';
 import { getProvider } from '~/services/provider/provider.context';
@@ -158,7 +158,7 @@ export default function Home() {
                       <span className="text-[8px] text-black font-bold">
                         {item.name}
                       </span>
-                      <ClientNavLink to={item.url}>SEE DETAILS</ClientNavLink>
+                      <LinkButton to={item.url}>SEE DETAILS</LinkButton>
                     </div>
                     <ListSeparator />
                   </li>

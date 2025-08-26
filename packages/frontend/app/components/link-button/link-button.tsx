@@ -1,7 +1,7 @@
 import { NavLink, type NavLinkProps } from 'react-router';
 import { twMerge } from 'tailwind-merge';
 
-export default function ClientNavLink({ className, ...props }: NavLinkProps) {
+export default function LinkButton({ className, ...props }: NavLinkProps) {
   return (
     <NavLink
       {...props}
