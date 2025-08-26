@@ -25,9 +25,8 @@ export class ApiService implements IApiService {
    */
   async get<T>(
     url: string,
-    params?: URLSearchParams,
     cacheKey?: string,
-    ttl: number = 300
+    ttl: number = Infinity
   ): Promise<T> {
     // Check cache first
     if (cacheKey && this.cache.has(cacheKey)) {
@@ -37,9 +36,7 @@ export class ApiService implements IApiService {
 
     try {
       console.log(`Making Star Wars API request to: ${url}`);
-      const response: AxiosResponse<T> = await this.client.get(url, {
-        params,
-      });
+      const response: AxiosResponse<T> = await this.client.get(url);
 
       // Cache the response if cacheKey is provided
       if (cacheKey) {
@@ -87,12 +84,14 @@ export class ApiService implements IApiService {
           case 503:
           case 504:
             throw new CustomError(
-              errorData?.message ?? statusText ?? 'External API error',
+              errorData?.message ?? statusText ?? 'Star Wards API error',
               status
             );
           default:
             throw new CustomError(
-              errorData?.message ?? statusText ?? 'External API request failed',
+              errorData?.message ??
+                statusText ??
+                'Star Wards API request failed',
               status ?? 500
             );
         }
@@ -103,16 +102,16 @@ export class ApiService implements IApiService {
         axiosError.code === 'ECONNREFUSED' ||
         axiosError.code === 'ENOTFOUND'
       ) {
-        throw new CustomError('External API is unreachable', 503);
+        throw new CustomError('Star Wards API is unreachable', 503);
       }
 
       if (axiosError.code === 'ETIMEDOUT') {
-        throw new CustomError('External API request timed out', 504);
+        throw new CustomError('Star Wards API request timed out', 504);
       }
 
       // Re-throw as generic error if we can't determine the type
       throw new CustomError(
-        axiosError.message ?? 'External API request failed',
+        axiosError.message ?? 'Star Wards API request failed',
         500
       );
     }

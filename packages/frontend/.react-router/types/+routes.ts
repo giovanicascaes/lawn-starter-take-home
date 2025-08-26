@@ -13,15 +13,37 @@ type Pages = {
   "/": {
     params: {};
   };
+  "/movie/:id": {
+    params: {
+      "id": string;
+    };
+  };
+  "/people/:id": {
+    params: {
+      "id": string;
+    };
+  };
 };
 
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/";
+    page: "/" | "/movie/:id" | "/people/:id";
+  };
+  "layouts/app-layout/app-layout.tsx": {
+    id: "layouts/app-layout/app-layout";
+    page: "/" | "/movie/:id" | "/people/:id";
   };
   "routes/home.tsx": {
     id: "routes/home";
     page: "/";
+  };
+  "routes/movie.tsx": {
+    id: "routes/movie";
+    page: "/movie/:id";
+  };
+  "routes/people.tsx": {
+    id: "routes/people";
+    page: "/people/:id";
   };
 };

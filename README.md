@@ -17,39 +17,44 @@ lawn-starter-take-home/
 ## 🚀 Features
 
 ### Frontend
+
 - **React Router v7** - Latest routing solution with file-based routing
 - **Tailwind CSS v4** - Modern utility-first CSS framework
 - **TypeScript** - Full type safety
 - **Vite** - Fast build tool and dev server
 
 ### Backend
+
 - **Express.js** - Fast, unopinionated web framework
 - **Node-Cache** - In-memory caching for better performance
-- **External API Integration** - Communicates with external APIs
+- **Star Wars API Integration** - Communicates with the Star Wars API
 - **Caching Strategy** - Intelligent request caching with TTL
 - **Security** - Helmet, CORS, compression middleware
 - **TypeScript** - Full type safety
 
 ### Infrastructure
+
 - **Docker** - Containerized development and production
 - **Monorepo** - Single repository for frontend and backend
 - **Workspaces** - NPM workspaces for dependency management
 
 ## 🛠️ Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm 9+
 - Docker & Docker Compose
 
 ## 📦 Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd lawn-starter-take-home
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
@@ -66,11 +71,13 @@ lawn-starter-take-home/
 ### Option 1: Local Development
 
 1. **Start the backend**
+
    ```bash
    npm run dev:backend
    ```
 
 2. **Start the frontend** (in a new terminal)
+
    ```bash
    npm run dev:frontend
    ```
@@ -83,12 +90,14 @@ lawn-starter-take-home/
 ### Option 2: Docker Development
 
 1. **Production mode (optimized builds)**
+
    ```bash
    npm run docker:build
    npm run docker:up:prod
    ```
 
 2. **Development mode (with hot reload)**
+
    ```bash
    npm run docker:build:dev
    npm run docker:up:dev
@@ -108,12 +117,15 @@ lawn-starter-take-home/
 ## 📚 API Endpoints
 
 ### Health & Status
+
 - `GET /api/health` - Health check with cache statistics
 
 ### Data Endpoints
-- `GET /api/external-data` - Fetch external data (cached for 5 minutes)
+
+- `GET /api/sw-api-data` - Fetch Star Wars API data (cached for 5 minutes)
 
 ### Cache Management
+
 - `GET /api/cache/stats` - Get cache statistics
 - `DELETE /api/cache/clear` - Clear cache (optional pattern parameter)
 
@@ -121,45 +133,49 @@ lawn-starter-take-home/
 
 ### Backend Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PORT` | `3001` | Backend server port |
-| `HOST` | `0.0.0.0` | Backend server host |
-| `FRONTEND_URL` | `http://localhost:3000` | Frontend URL for CORS |
-| `EXTERNAL_API_URL` | `https://jsonplaceholder.typicode.com` | External API base URL |
+| Variable       | Default                 | Description            |
+| -------------- | ----------------------- | ---------------------- |
+| `PORT`         | `3001`                  | Backend server port    |
+| `HOST`         | `0.0.0.0`               | Backend server host    |
+| `FRONTEND_URL` | `http://localhost:3000` | Frontend URL for CORS  |
+| `SW_API_URL`   | `https://swapi.tech/`   | Star Wars API base URL |
 
 ### Cache Configuration
 
-| Setting | Default | Description |
-|---------|---------|-------------|
-| `CACHE_TTL` | `300` | Cache time-to-live in seconds |
-| `CACHE_CHECK_PERIOD` | `600` | Cache cleanup check period |
+| Setting              | Default | Description                   |
+| -------------------- | ------- | ----------------------------- |
+| `CACHE_TTL`          | `300`   | Cache time-to-live in seconds |
+| `CACHE_CHECK_PERIOD` | `600`   | Cache cleanup check period    |
 
 ## 🐳 Docker
 
 ### Building Images
+
 ```bash
 npm run docker:build
 ```
 
 ### Running Services
+
 ```bash
 npm run docker:up
 ```
 
 ### Stopping Services
+
 ```bash
 npm run docker:down
 ```
 
 ### Viewing Logs
+
 ```bash
 docker-compose logs -f [service-name]
 ```
 
 ## 📊 Performance Features
 
-- **Request Caching**: Intelligent caching of external API responses
+- **Request Caching**: Intelligent caching of Star Wars API responses
 - **Compression**: Gzip compression for all responses
 - **Security Headers**: Helmet.js for security best practices
 - **CORS**: Configurable cross-origin resource sharing
@@ -167,19 +183,19 @@ docker-compose logs -f [service-name]
 
 ## 🧪 Development Scripts
 
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Start both frontend and backend in development mode |
-| `npm run dev:frontend` | Start only frontend |
-| `npm run dev:backend` | Start only backend |
-| `npm run build` | Build both frontend and backend |
-| `npm run start` | Start backend in production mode |
-| `npm run docker:build` | Build Docker images for production |
-| `npm run docker:build:dev` | Build Docker images for development |
-| `npm run docker:up` | Start Docker services in foreground |
-| `npm run docker:up:prod` | Start Docker services in production mode (detached) |
-| `npm run docker:up:dev` | Start Docker services in development mode (with hot reload) |
-| `npm run docker:down` | Stop Docker services |
+| Script                     | Description                                                 |
+| -------------------------- | ----------------------------------------------------------- |
+| `npm run dev`              | Start both frontend and backend in development mode         |
+| `npm run dev:frontend`     | Start only frontend                                         |
+| `npm run dev:backend`      | Start only backend                                          |
+| `npm run build`            | Build both frontend and backend                             |
+| `npm run start`            | Start backend in production mode                            |
+| `npm run docker:build`     | Build Docker images for production                          |
+| `npm run docker:build:dev` | Build Docker images for development                         |
+| `npm run docker:up`        | Start Docker services in foreground                         |
+| `npm run docker:up:prod`   | Start Docker services in production mode (detached)         |
+| `npm run docker:up:dev`    | Start Docker services in development mode (with hot reload) |
+| `npm run docker:down`      | Stop Docker services                                        |
 
 ## 🔍 Troubleshooting
 

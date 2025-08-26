@@ -13,7 +13,10 @@ export class MovieApiService extends ApiService implements IMovieApiService {
     if (search) {
       params.set('title', search);
     }
-    const movies = await this.get<IMovieListData>(url, params);
+    const movies = await this.get<IMovieListData>(
+      `${url}?${params.toString()}`,
+      `movie:getList${search ? `:${search}` : ''}`
+    );
     return (
       movies.result?.map(movie => {
         return {
@@ -26,7 +29,10 @@ export class MovieApiService extends ApiService implements IMovieApiService {
 
   async getOneById(id: number) {
     const url = `/films/${id}`;
-    const movie = await this.get<IMovieDetailsData>(url);
+    const movie = await this.get<IMovieDetailsData>(
+      url,
+      `movie:getOneById:${id}`
+    );
     const {
       uid,
       properties: { characters, ...movieData },

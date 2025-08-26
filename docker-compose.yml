@@ -1,14 +1,14 @@
-
-
 services:
   frontend:
     build:
       context: ./packages/frontend
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NODE_ENV=development
+      - VITE_BACKEND_CSR_URL=http://localhost:3001
+      - VITE_BACKEND_SSR_URL=http://backend:3001
     volumes:
       - ./packages/frontend:/app
       - /app/node_modules
@@ -22,13 +22,13 @@ services:
       context: ./packages/backend
       dockerfile: Dockerfile
     ports:
-      - "3001:3001"
+      - '3001:3001'
     environment:
       - NODE_ENV=development
       - PORT=3001
       - HOST=0.0.0.0
       - FRONTEND_URL=http://localhost:3000
-      - EXTERNAL_API_URL=https://www.swapi.tech/api
+      - SW_API_URL=https://www.swapi.tech/api
     volumes:
       - ./packages/backend:/app
       - /app/node_modules

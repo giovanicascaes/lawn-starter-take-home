@@ -14,12 +14,10 @@ export interface IMovieData {
 }
 
 export interface IMovieListData {
-  message: string;
   result?: IMovieData[];
 }
 
 export interface IMovieDetailsData {
-  message: string;
   result?: IMovieData;
 }
 

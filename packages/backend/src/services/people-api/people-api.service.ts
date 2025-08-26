@@ -13,7 +13,20 @@ export class PeopleApiService extends ApiService implements IPeopleApiService {
     if (search) {
       params.set('name', search);
     }
-    const characters = await this.get<ICharacterListData>(url, params);
+    const characters = await this.get<ICharacterListData>(
+      `${url}?${params.toString()}`,
+      `people:getList${search ? `:${search}` : ''}`
+    );
+    if (search) {
+      return (
+        characters.result?.map(character => {
+          return {
+            uid: character.uid,
+            name: character.properties.name,
+          };
+        }) ?? []
+      );
+    }
     return (
       characters.results?.map(character => {
         return {
@@ -26,7 +39,10 @@ export class PeopleApiService extends ApiService implements IPeopleApiService {
 
   async getOneById(id: number) {
     const url = `/people/${id}`;
-    const character = await this.get<ICharacterDetailsData>(url);
+    const character = await this.get<ICharacterDetailsData>(
+      url,
+      `people:getOneById:${id}`
+    );
     const {
       uid,
       properties: { films, ...characterData },

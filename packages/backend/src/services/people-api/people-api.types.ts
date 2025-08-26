@@ -10,24 +10,25 @@ export interface ICharacterData {
     height: string;
     mass: string;
     birth_year: string;
+    eye_color: string;
+    hair_color: string;
     films: TUrl[];
   };
   uid: string;
 }
 
-export interface ICharacterDataLean {
+export interface ICharacterDetailsData {
+  result?: ICharacterData;
+}
+
+export interface ICharacterItemData {
   uid: string;
   name: string;
 }
 
 export interface ICharacterListData {
-  message: string;
-  results?: ICharacterDataLean[];
-}
-
-export interface ICharacterDetailsData {
-  message: string;
-  result?: ICharacterData;
+  results?: ICharacterItemData[];
+  result?: ICharacterData[];
 }
 
 // Return types for the transformed data
@@ -43,6 +44,8 @@ export interface ICharacterDetails {
   height: string;
   mass: string;
   birth_year: string;
+  eye_color: string;
+  hair_color: string;
   movies: Array<IMovieListItem>;
 }
 
