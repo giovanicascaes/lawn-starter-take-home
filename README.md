@@ -59,13 +59,6 @@ lawn-starter-take-home/
    npm install
    ```
 
-3. **Set up environment variables**
-   ```bash
-   # Backend
-   cp packages/backend/env.example packages/backend/.env
-   # Edit .env file with your configuration
-   ```
-
 ## 🚀 Development
 
 ### Option 1: Local Development
@@ -118,16 +111,38 @@ lawn-starter-take-home/
 
 ### Health & Status
 
-- `GET /api/health` - Health check with cache statistics
+- `GET /api/health` - Health check with cache statistics and uptime information
 
-### Data Endpoints
+### Star Wars Data Endpoints
 
-- `GET /api/sw-api-data` - Fetch Star Wars API data (cached for 5 minutes)
+- `GET /api/people` - Get list of people/characters (supports search query parameter)
+- `GET /api/people/:id` - Get specific person/character by ID
+- `GET /api/movies` - Get list of movies/films (supports search query parameter)
+- `GET /api/movies/:id` - Get specific movie/film by ID with character details
 
 ### Cache Management
 
-- `GET /api/cache/stats` - Get cache statistics
-- `DELETE /api/cache/clear` - Clear cache (optional pattern parameter)
+- `GET /api/cache/stats` - Get cache statistics (hit rates, miss rates, key count)
+- `DELETE /api/cache/clear` - Clear cache (optional `pattern` query parameter for selective clearing)
+
+### Analytics & Monitoring
+
+- `GET /api/statistics` - Get top 5 most requested endpoints with request counts and percentages
+
+### Error Handling Demo
+
+- `GET /api/demo/error/:type` - Demo endpoint to showcase error handling for different scenarios:
+  - `validation` - 400 Bad Request
+  - `not-found` - 404 Not Found
+  - `unauthorized` - 401 Unauthorized
+  - `forbidden` - 403 Forbidden
+  - `conflict` - 409 Conflict
+  - `rate-limit` - 429 Too Many Requests
+  - `server` - 500 Internal Server Error
+
+### Root Endpoint
+
+- `GET /` - API information and endpoint listing
 
 ## 🔧 Configuration
 
