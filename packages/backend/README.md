@@ -1,6 +1,6 @@
-# Backend API with Error Interceptor
+# Backend API with Error Interceptor and Statistics Service
 
-This backend provides a comprehensive error handling system with an Express error interceptor middleware.
+This backend provides a comprehensive error handling system with an Express error interceptor middleware and a real-time statistics tracking service.
 
 ## Error Interceptor Features
 
@@ -85,7 +85,26 @@ In development mode, additional debug information is included:
 }
 ```
 
-## Demo Endpoints
+## API Endpoints
+
+### Core Endpoints
+
+- `GET /api/health` - Health check with cache statistics
+- `GET /api/people` - List of people with optional search
+- `GET /api/people/:id` - Get person by ID
+- `GET /api/movies` - List of movies with optional search
+- `GET /api/movies/:id` - Get movie by ID
+
+### Cache Management
+
+- `GET /api/cache/stats` - Cache statistics
+- `DELETE /api/cache/clear` - Clear cache with optional pattern
+
+### Statistics
+
+- `GET /api/statistics` - Top 5 requests with percentages (auto-updated every 5 minutes)
+
+### Demo Endpoints
 
 Test the error handling system with these demo endpoints:
 
@@ -106,8 +125,19 @@ Test the error handling system with these demo endpoints:
 The error interceptor middleware is registered after all routes to catch any unhandled errors:
 
 1. Application middleware (helmet, cors, compression, etc.)
-2. API routes
+2. API routes with request tracking middleware
 3. 404 handler
 4. Error interceptor (catches all errors)
 
 This ensures that all errors, whether thrown in routes or occurring in middleware, are properly formatted and returned to clients.
+
+## Statistics Service
+
+The backend includes a comprehensive statistics service that:
+
+- **Automatically tracks** all API requests
+- **Provides real-time insights** into endpoint usage patterns
+- **Recomputes statistics** every 5 minutes using an event-driven queue system
+- **Requires no configuration** - works out of the box
+
+For detailed documentation, see [STATISTICS.md](./STATISTICS.md).
