@@ -1,16 +1,20 @@
-import { Link, useLoaderData } from 'react-router';
+import { NavLink, useLoaderData } from 'react-router';
 import { Fragment } from 'react/jsx-runtime';
+import { twMerge } from 'tailwind-merge';
 import ResourceDetails, {
   ResourceDetailsItem,
 } from '~/components/resource-details/resource-details';
 import { getProvider } from '~/services/provider/provider.context';
+import { peopleQueries } from '~/services/query/queries';
 import type { Route } from './+types/people';
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: 'People' }];
 }
 export async function loader({ params }: Route.LoaderArgs) {
-  const people = await getProvider().people.getOneById(Number(params.id));
+  const people = await getProvider().query.fetchQuery(
+    peopleQueries.detail(Number(params.id))
+  );
   return people;
 }
 
@@ -54,9 +58,17 @@ export default function People() {
             ))}
           </ResourceDetailsItem>
           <ResourceDetailsItem title="Films">
-            {people?.movies?.map(movie => (
+            {people?.movies?.map((movie, index, array) => (
               <Fragment key={movie.id}>
-                <Link to={`/movie/${movie.id}`}>{movie.title}</Link>,{' '}
+                <NavLink
+                  to={`/movie/${movie.id}`}
+                  className={({ isPending }) =>
+                    twMerge(isPending && 'opacity-50 hover:cursor-not-allowed')
+                  }
+                >
+                  {movie.title}
+                </NavLink>
+                {index < array.length - 1 && ', '}
               </Fragment>
             ))}
           </ResourceDetailsItem>

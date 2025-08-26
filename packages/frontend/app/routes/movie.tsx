@@ -1,13 +1,17 @@
-import { Link, useLoaderData } from 'react-router';
+import { NavLink, useLoaderData } from 'react-router';
 import { Fragment } from 'react/jsx-runtime';
+import { twMerge } from 'tailwind-merge';
 import ResourceDetails, {
   ResourceDetailsItem,
 } from '~/components/resource-details/resource-details';
 import { getProvider } from '~/services/provider/provider.context';
+import { movieQueries } from '~/services/query/queries';
 import type { Route } from './+types/movie';
 
 export async function loader({ params }: Route.LoaderArgs) {
-  const movie = await getProvider().movie.getOneById(Number(params.id));
+  const movie = await getProvider().query.fetchQuery(
+    movieQueries.detail(Number(params.id))
+  );
   return movie;
 }
 
@@ -21,10 +25,17 @@ export default function Movie() {
             {movie?.openingCrawl}
           </ResourceDetailsItem>
           <ResourceDetailsItem title="Characters">
-            {movie?.characters.map(character => (
+            {movie?.characters.map((character, index, array) => (
               <Fragment key={character.id}>
-                <Link to={`/people/${character.id}`}>{character.name}</Link>
-                ,{' '}
+                <NavLink
+                  to={`/people/${character.id}`}
+                  className={({ isPending }) =>
+                    twMerge(isPending && 'opacity-50 hover:cursor-not-allowed')
+                  }
+                >
+                  {character.name}
+                </NavLink>
+                {index < array.length - 1 && ', '}
               </Fragment>
             ))}
           </ResourceDetailsItem>
