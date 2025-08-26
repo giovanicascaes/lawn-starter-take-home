@@ -49,7 +49,10 @@ export class PeopleApiService extends ApiService implements IPeopleApiService {
     } = character.result!;
     const movies = await Promise.all(
       character.result?.properties.films.map(movie =>
-        this.get<IMovieDetailsData>(movie)
+        this.get<IMovieDetailsData>(
+          movie,
+          `people:getOneById:${id}:movie:${movie}`
+        )
       ) ?? []
     );
     return {

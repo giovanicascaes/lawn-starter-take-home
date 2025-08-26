@@ -39,7 +39,10 @@ export class MovieApiService extends ApiService implements IMovieApiService {
     } = movie.result!;
     const characterData = await Promise.all(
       movie.result?.properties.characters.map(character =>
-        this.get<ICharacterDetailsData>(character)
+        this.get<ICharacterDetailsData>(
+          character,
+          `movie:getOneById:${id}:character:${character}`
+        )
       ) ?? []
     );
     return {
