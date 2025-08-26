@@ -6,7 +6,7 @@ services:
     ports:
       - '3000:3000'
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
       - VITE_BACKEND_CSR_URL=http://localhost:3001
       - VITE_BACKEND_SSR_URL=http://backend:3001
     volumes:
@@ -24,7 +24,7 @@ services:
     ports:
       - '3001:3001'
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
       - PORT=3001
       - HOST=0.0.0.0
       - FRONTEND_URL=http://localhost:3000
