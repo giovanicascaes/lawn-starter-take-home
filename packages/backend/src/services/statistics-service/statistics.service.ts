@@ -4,11 +4,12 @@ import type {
   ITopRequestsResponse,
 } from './statistics.types';
 
+const RECOMPUTATION_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+
 export class StatisticsService implements IStatisticsService {
   private requestCounts: Map<string, number> = new Map();
   private totalRequests: number = 0;
   private recomputationInterval: NodeJS.Timeout | null = null;
-  private readonly RECOMPUTATION_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 
   constructor() {
     this.startPeriodicRecomputation();
@@ -73,7 +74,7 @@ export class StatisticsService implements IStatisticsService {
   private startPeriodicRecomputation(): void {
     this.recomputationInterval = setInterval(() => {
       this.recomputeStatistics();
-    }, this.RECOMPUTATION_INTERVAL_MS);
+    }, RECOMPUTATION_INTERVAL_MS);
 
     // Ensure cleanup on process exit
     process.on('exit', () => {
@@ -110,7 +111,7 @@ export class StatisticsService implements IStatisticsService {
    */
   private getNextRecomputationTime(): string {
     const now = new Date();
-    const next = new Date(now.getTime() + this.RECOMPUTATION_INTERVAL_MS);
+    const next = new Date(now.getTime() + RECOMPUTATION_INTERVAL_MS);
     return next.toISOString();
   }
 
