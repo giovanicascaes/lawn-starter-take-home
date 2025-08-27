@@ -9,11 +9,11 @@ import type { IApiConfig, IServerConfig } from './index.types';
 import {
   errorInterceptor,
   notFoundHandler,
-} from './middleware/error-interceptor/error-interceptor';
-import { createApiRouter } from './routes/api';
-import { ApiProvider } from './services/api-provider';
-import { CacheService } from './services/cache-service/cache.service';
-import { StatisticsService } from './services/statistics-service/statistics.service';
+} from './middleware/error-interceptor/error-interceptor.js';
+import { createApiRouter } from './routes/api.js';
+import { ApiProvider } from './services/api-provider.js';
+import { CacheService } from './services/cache-service/cache.service.js';
+import { StatisticsService } from './services/statistics-service/statistics.service.js';
 
 // Load environment variables
 dotenv.config();

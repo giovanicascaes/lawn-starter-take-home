@@ -9,9 +9,6 @@ services:
       - NODE_ENV=production
       - VITE_BACKEND_CSR_URL=http://localhost:3001
       - VITE_BACKEND_SSR_URL=http://backend:3001
-    volumes:
-      - ./packages/frontend:/app
-      - /app/node_modules
     depends_on:
       - backend
     networks:
@@ -29,9 +26,6 @@ services:
       - HOST=0.0.0.0
       - FRONTEND_URL=http://localhost:3000
       - SW_API_URL=https://www.swapi.tech/api
-    volumes:
-      - ./packages/backend:/app
-      - /app/node_modules
     networks:
       - app-network
 

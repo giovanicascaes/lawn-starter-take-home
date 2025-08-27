@@ -1,8 +1,8 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express';
 import type { IApiResponse } from '../index.types';
-import { CustomError } from '../middleware/error-interceptor/error-interceptor';
-import { createRequestTracker } from '../middleware/request-tracker/request-tracker';
+import { CustomError } from '../middleware/error-interceptor/error-interceptor.js';
+import { createRequestTracker } from '../middleware/request-tracker/request-tracker.js';
 import type { IApiProvider } from '../services/api-provider.types';
 import type { ICacheService } from '../services/cache-service/cache-service.types';
 import type { IStatisticsService } from '../services/statistics-service/statistics.types';

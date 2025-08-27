@@ -7,7 +7,7 @@ import {
   RateLimitError,
   UnauthorizedError,
   ValidationError,
-} from '../../middleware/error-interceptor/error-interceptor';
+} from '../../middleware/error-interceptor/error-interceptor.js';
 import type { ICacheService } from '../cache-service/cache-service.types';
 import type { IApiService } from './api-service.types';
 

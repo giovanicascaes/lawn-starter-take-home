@@ -1,4 +1,4 @@
-import { ApiService } from '../api-service/api-service';
+import { ApiService } from '../api-service/api-service.js';
 import { IMovieDetailsData } from '../movie-api/movie-api.types';
 import {
   ICharacterDetailsData,
