@@ -49,7 +49,7 @@ lawn-starter-take-home/
 1. **Clone the repository**
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/giovanicascaes/lawn-starter-take-home.git
    cd lawn-starter-take-home
    ```
 
@@ -61,45 +61,97 @@ lawn-starter-take-home/
 
 ## 🚀 Development
 
-### Option 1: Local Development
+### Local Development (Without Docker)
 
-1. **Start the backend**
+#### Start Backend Only
 
-   ```bash
-   npm run dev:backend
-   ```
+```bash
+npm run dev:backend
+```
 
-2. **Start the frontend** (in a new terminal)
+#### Start Frontend Only
 
-   ```bash
-   npm run dev:frontend
-   ```
+```bash
+npm run dev:frontend
+```
 
-3. **Or start both simultaneously**
-   ```bash
-   npm run dev
-   ```
+#### Start Both Services Simultaneously
 
-### Option 2: Docker Development
+```bash
+npm run dev
+```
 
-1. **Production mode (optimized builds)**
+### Production Build (Without Docker)
 
-   ```bash
-   npm run docker:build
-   npm run docker:up:prod
-   ```
+#### Build Both Packages
 
-2. **Development mode (with hot reload)**
+```bash
+npm run build
+```
 
-   ```bash
-   npm run docker:build:dev
-   npm run docker:up:dev
-   ```
+#### Build Backend Only
 
-3. **Stop services**
-   ```bash
-   npm run docker:down
-   ```
+```bash
+npm run build:backend
+```
+
+#### Build Frontend Only
+
+```bash
+npm run build:frontend
+```
+
+#### Start Production Services
+
+```bash
+npm run start
+```
+
+### Local Development (With Docker)
+
+#### Build Development Images
+
+```bash
+npm run docker:build:dev
+```
+
+#### Start Development Services (with hot reload)
+
+```bash
+npm run docker:up:dev
+```
+
+#### Stop Development Services
+
+```bash
+npm run docker:down
+```
+
+### Production Build (With Docker)
+
+#### Build Production Images
+
+```bash
+npm run docker:build
+```
+
+#### Start Production Services (detached)
+
+```bash
+npm run docker:up:prod
+```
+
+#### Start Production Services (foreground)
+
+```bash
+npm run docker:up
+```
+
+#### Stop Production Services
+
+```bash
+npm run docker:down
+```
 
 ## 🌐 Access Points
 
@@ -162,32 +214,6 @@ lawn-starter-take-home/
 | `CACHE_TTL`          | `300`   | Cache time-to-live in seconds |
 | `CACHE_CHECK_PERIOD` | `600`   | Cache cleanup check period    |
 
-## 🐳 Docker
-
-### Building Images
-
-```bash
-npm run docker:build
-```
-
-### Running Services
-
-```bash
-npm run docker:up
-```
-
-### Stopping Services
-
-```bash
-npm run docker:down
-```
-
-### Viewing Logs
-
-```bash
-docker-compose logs -f [service-name]
-```
-
 ## 📊 Performance Features
 
 - **Request Caching**: Intelligent caching of Star Wars API responses
@@ -198,19 +224,46 @@ docker-compose logs -f [service-name]
 
 ## 🧪 Development Scripts
 
+### Development & Building
+
+| Script                      | Description                                         |
+| --------------------------- | --------------------------------------------------- |
+| `npm run dev`               | Start both frontend and backend in development mode |
+| `npm run dev:frontend`      | Start only frontend                                 |
+| `npm run dev:backend`       | Start only backend                                  |
+| `npm run dev:backend:watch` | Start backend with nodemon watch mode               |
+| `npm run build`             | Build both frontend and backend                     |
+| `npm run build:frontend`    | Build only frontend                                 |
+| `npm run build:backend`     | Build only backend                                  |
+
+### Production
+
+| Script                   | Description                                        |
+| ------------------------ | -------------------------------------------------- |
+| `npm run start`          | Start both frontend and backend in production mode |
+| `npm run start:frontend` | Start only frontend in production mode             |
+| `npm run start:backend`  | Start only backend in production mode              |
+
+### Docker Operations
+
 | Script                     | Description                                                 |
 | -------------------------- | ----------------------------------------------------------- |
-| `npm run dev`              | Start both frontend and backend in development mode         |
-| `npm run dev:frontend`     | Start only frontend                                         |
-| `npm run dev:backend`      | Start only backend                                          |
-| `npm run build`            | Build both frontend and backend                             |
-| `npm run start`            | Start backend in production mode                            |
 | `npm run docker:build`     | Build Docker images for production                          |
 | `npm run docker:build:dev` | Build Docker images for development                         |
 | `npm run docker:up`        | Start Docker services in foreground                         |
 | `npm run docker:up:prod`   | Start Docker services in production mode (detached)         |
 | `npm run docker:up:dev`    | Start Docker services in development mode (with hot reload) |
 | `npm run docker:down`      | Stop Docker services                                        |
+
+### Code Formatting
+
+| Script                    | Description                                  |
+| ------------------------- | -------------------------------------------- |
+| `npm run format`          | Format all code with Prettier                |
+| `npm run format:check`    | Check code formatting without making changes |
+| `npm run format:backend`  | Format backend code only                     |
+| `npm run format:frontend` | Format frontend code only                    |
+| `npm run format:app`      | Format frontend app code only                |
 
 ## 🔍 Troubleshooting
 
