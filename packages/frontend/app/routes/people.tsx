@@ -1,4 +1,4 @@
-import { NavLink, useLoaderData } from 'react-router';
+import { data, NavLink, useLoaderData } from 'react-router';
 import { Fragment } from 'react/jsx-runtime';
 import { twMerge } from 'tailwind-merge';
 import ResourceDetails, {
@@ -15,40 +15,46 @@ export async function loader({ params }: Route.LoaderArgs) {
   const people = await getProvider().query.fetchQuery(
     peopleQueries.detail(Number(params.id))
   );
-  return people;
+  if (!people) {
+    throw data(`People Not Found: ${params.id}`, { status: 404 });
+  }
+  return {
+    data: people,
+  };
 }
 
 export default function People() {
-  const people = useLoaderData<typeof loader>();
+  const loaderData = useLoaderData<typeof loader>();
+  const people = loaderData.data!;
   return (
     <div className="flex flex-col items-center w-full max-w-[402px]">
-      <ResourceDetails title={people?.name}>
+      <ResourceDetails title={people.name}>
         <div className="flex gap-x-[50px]">
           <ResourceDetailsItem title="Details">
             {[
               {
                 label: 'Birth Year',
-                value: people?.birthYear,
+                value: people.birthYear,
               },
               {
                 label: 'Gender',
-                value: people?.gender,
+                value: people.gender,
               },
               {
                 label: 'Eye Color',
-                value: people?.eyeColor,
+                value: people.eyeColor,
               },
               {
                 label: 'Hair Color',
-                value: people?.hairColor,
+                value: people.hairColor,
               },
               {
                 label: 'Height',
-                value: people?.height,
+                value: people.height,
               },
               {
                 label: 'Mass',
-                value: people?.mass,
+                value: people.mass,
               },
             ].map(({ label, value }) => (
               <Fragment key={label}>
@@ -58,7 +64,7 @@ export default function People() {
             ))}
           </ResourceDetailsItem>
           <ResourceDetailsItem title="Films">
-            {people?.movies?.map((movie, index, array) => (
+            {people.movies.map((movie, index, array) => (
               <Fragment key={movie.id}>
                 <NavLink
                   to={`/movie/${movie.id}`}

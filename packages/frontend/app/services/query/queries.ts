@@ -13,7 +13,7 @@ export const peopleQueries = {
   detail: (id: number) =>
     queryOptions({
       queryKey: [...peopleQueries.details(), id],
-      queryFn: () => getProvider().people.getOneById(id),
+      queryFn: async () => (await getProvider().people.getOneById(id)) ?? null,
     }),
 };
 export const movieQueries = {
@@ -28,7 +28,6 @@ export const movieQueries = {
   detail: (id: number) =>
     queryOptions({
       queryKey: [...movieQueries.details(), id],
-      queryFn: () => getProvider().movie.getOneById(id),
-      staleTime: 5000,
+      queryFn: async () => (await getProvider().movie.getOneById(id)) ?? null,
     }),
 };
