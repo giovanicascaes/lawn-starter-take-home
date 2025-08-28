@@ -5,7 +5,6 @@ import ContentCard from '~/components/content-card/content-card';
 import Input from '~/components/input/input';
 import LinkButton from '~/components/link-button/link-button';
 import ListSeparator from '~/components/list-separator/list-separator';
-import type { IListItem } from '~/entities/shared.types';
 import { getProvider } from '~/services/provider/provider.context';
 import { movieQueries, peopleQueries } from '~/services/query/queries';
 import type { Route } from './+types/home';
@@ -17,8 +16,6 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-type TListItemWithUrl = IListItem & { url: string };
-
 const getSearchResults = async (
   search: string,
   searchType: 'people' | 'movie'
@@ -27,23 +24,28 @@ const getSearchResults = async (
     const people = await getProvider().query.fetchQuery(
       peopleQueries.list(search)
     );
-    return {
-      data: people.map(person => ({ ...person, url: `/people/${person.id}` })),
-    };
+    return people.map(person => ({ ...person, url: `/people/${person.id}` }));
   }
   const movies = await getProvider().query.fetchQuery(
     movieQueries.list(search)
   );
-  return {
-    data: movies.map(movie => ({ ...movie, url: `/movie/${movie.id}` })),
-  };
+  return movies.map(movie => ({ ...movie, url: `/movie/${movie.id}` }));
 };
 
 export async function clientAction({ request }: Route.ClientActionArgs) {
   const data = await request.formData();
   const search = data.get('search') as string;
   const searchType = data.get('searchType') as 'people' | 'movie';
-  return getSearchResults(search, searchType);
+  try {
+    return {
+      ok: true,
+      data: await getSearchResults(search, searchType),
+    };
+  } catch {
+    return {
+      ok: false,
+    };
+  }
 }
 
 export async function clientLoader() {
@@ -52,11 +54,18 @@ export async function clientLoader() {
   if (search && searchType) {
     localStorage.removeItem('search');
     localStorage.removeItem('searchType');
-    return {
-      data: await getSearchResults(search, searchType),
-      search,
-      searchType,
-    };
+    try {
+      return {
+        ok: true,
+        data: await getSearchResults(search, searchType),
+        search,
+        searchType,
+      };
+    } catch {
+      return {
+        ok: false,
+      };
+    }
   }
   return null;
 }
@@ -66,12 +75,8 @@ export function HydrateFallback() {
 }
 
 export default function Home() {
-  const fetcher = useFetcher<{ data: TListItemWithUrl[] }>();
-  const loaderData = useLoaderData<{
-    data: { data: TListItemWithUrl[] };
-    search: string;
-    searchType: 'people' | 'movie';
-  }>();
+  const fetcher = useFetcher<typeof clientAction>();
+  const loaderData = useLoaderData<typeof clientLoader>();
   const [search, setSearch] = useState(loaderData?.search ?? '');
   const [searchType, setSearchType] = useState<'people' | 'movie'>(
     loaderData?.searchType ?? 'people'
@@ -88,7 +93,8 @@ export default function Home() {
     };
   }, []);
 
-  const data = fetcher.data?.data ?? loaderData?.data?.data;
+  const data = fetcher.data?.data ?? loaderData?.data;
+  const error = (fetcher.data?.ok ?? loaderData?.ok) === false;
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -168,7 +174,9 @@ export default function Home() {
               <span className="max-w-[162px] text-[7px] text-center font-bold text-pinkish-gray my-auto">
                 {fetcher.state === 'submitting'
                   ? 'Searching...'
-                  : 'There are zero matches.Use the form to search for People or Movies.'}
+                  : error
+                    ? 'There is an error. Please try again.'
+                    : 'There are zero matches.Use the form to search for People or Movies.'}
               </span>
             )}
           </div>
