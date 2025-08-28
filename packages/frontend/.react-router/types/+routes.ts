@@ -23,16 +23,19 @@ type Pages = {
       "id": string;
     };
   };
+  "/search": {
+    params: {};
+  };
 };
 
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/movie/:id" | "/people/:id";
+    page: "/" | "/movie/:id" | "/people/:id" | "/search";
   };
   "layouts/app-layout/app-layout.tsx": {
     id: "layouts/app-layout/app-layout";
-    page: "/" | "/movie/:id" | "/people/:id";
+    page: "/" | "/movie/:id" | "/people/:id" | "/search";
   };
   "routes/home.tsx": {
     id: "routes/home";
@@ -45,5 +48,9 @@ type RouteFiles = {
   "routes/people.tsx": {
     id: "routes/people";
     page: "/people/:id";
+  };
+  "routes/search.tsx": {
+    id: "routes/search";
+    page: "/search";
   };
 };

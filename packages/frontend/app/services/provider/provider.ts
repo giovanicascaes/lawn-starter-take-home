@@ -1,4 +1,4 @@
-import { getBackendUrl } from '~/lib/utils/utils';
+import { getBackendUrl } from '~/lib/utils';
 import { createMovieService } from '../movie/movie';
 import { createPeopleService } from '../people/people';
 import { makeQueryClient } from '../query/query';

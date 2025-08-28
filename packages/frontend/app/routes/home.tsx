@@ -2,50 +2,19 @@ import { useEffect, useRef, useState } from 'react';
 import { useFetcher, useLoaderData } from 'react-router';
 import Button from '~/components/button/button';
 import ContentCard from '~/components/content-card/content-card';
+import DataMessage from '~/components/data-message/data-message';
 import Input from '~/components/input/input';
 import LinkButton from '~/components/link-button/link-button';
 import ListSeparator from '~/components/list-separator/list-separator';
-import { getProvider } from '~/services/provider/provider.context';
-import { movieQueries, peopleQueries } from '~/services/query/queries';
+import { searchFor } from '~/lib/search';
 import type { Route } from './+types/home';
+import type { Route as SearchRoute } from './+types/search';
 
 export function meta({}: Route.MetaArgs) {
   return [
     { title: 'Lawn Starter API' },
     { name: 'description', content: 'Lawn Starter API' },
   ];
-}
-
-const getSearchResults = async (
-  search: string,
-  searchType: 'people' | 'movie'
-) => {
-  if (searchType === 'people') {
-    const people = await getProvider().query.fetchQuery(
-      peopleQueries.list(search)
-    );
-    return people.map(person => ({ ...person, url: `/people/${person.id}` }));
-  }
-  const movies = await getProvider().query.fetchQuery(
-    movieQueries.list(search)
-  );
-  return movies.map(movie => ({ ...movie, url: `/movie/${movie.id}` }));
-};
-
-export async function clientAction({ request }: Route.ClientActionArgs) {
-  const data = await request.formData();
-  const search = data.get('search') as string;
-  const searchType = data.get('searchType') as 'people' | 'movie';
-  try {
-    return {
-      ok: true,
-      data: await getSearchResults(search, searchType),
-    };
-  } catch {
-    return {
-      ok: false,
-    };
-  }
 }
 
 export async function clientLoader() {
@@ -57,7 +26,7 @@ export async function clientLoader() {
     try {
       return {
         ok: true,
-        data: await getSearchResults(search, searchType),
+        data: await searchFor(search, searchType),
         search,
         searchType,
       };
@@ -75,7 +44,7 @@ export function HydrateFallback() {
 }
 
 export default function Home() {
-  const fetcher = useFetcher<typeof clientAction>();
+  const fetcher = useFetcher<SearchRoute.ComponentProps['loaderData']>();
   const loaderData = useLoaderData<typeof clientLoader>();
   const [search, setSearch] = useState(loaderData?.search ?? '');
   const [searchType, setSearchType] = useState<'people' | 'movie'>(
@@ -99,7 +68,7 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center w-full">
       <aside className="flex gap-x-[15px]">
-        <fetcher.Form method="post">
+        <fetcher.Form method="get" action="/search">
           <ContentCard className="gap-y-2.5 w-[205px]">
             <fieldset className="text-unamed-gray text-[7px] flex gap-x-[15px]">
               <legend className="font-semibold mb-2.5">
@@ -143,10 +112,10 @@ export default function Home() {
             />
             <Button
               className="w-full"
-              disabled={!search.trim() || fetcher.state === 'submitting'}
+              disabled={!search.trim() || fetcher.state !== 'idle'}
               type="submit"
             >
-              {fetcher.state === 'submitting' ? 'SEARCHING...' : 'SEARCH'}
+              {fetcher.state !== 'idle' ? 'SEARCHING...' : 'SEARCH'}
             </Button>
           </ContentCard>
         </fetcher.Form>
@@ -171,13 +140,13 @@ export default function Home() {
                 ))}
               </ul>
             ) : (
-              <span className="max-w-[162px] text-[7px] text-center font-bold text-pinkish-gray my-auto">
-                {fetcher.state === 'submitting'
+              <DataMessage>
+                {fetcher.state !== 'idle'
                   ? 'Searching...'
                   : error
                     ? 'There is an error. Please try again.'
                     : 'There are zero matches.Use the form to search for People or Movies.'}
-              </span>
+              </DataMessage>
             )}
           </div>
         </ContentCard>

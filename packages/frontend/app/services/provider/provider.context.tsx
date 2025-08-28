@@ -1,6 +1,6 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { createContext } from 'react';
-import { isServer } from '~/lib/utils/utils';
+import { isServer } from '~/lib/utils';
 import { provider } from './provider';
 import type { Provider } from './provider.types';
 

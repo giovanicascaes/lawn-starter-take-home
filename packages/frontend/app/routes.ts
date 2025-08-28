@@ -10,5 +10,6 @@ export default [
     index('routes/home.tsx'),
     route('movie/:id', 'routes/movie.tsx'),
     route('people/:id', 'routes/people.tsx'),
+    route('search', 'routes/search.tsx'),
   ]),
 ] satisfies RouteConfig;
