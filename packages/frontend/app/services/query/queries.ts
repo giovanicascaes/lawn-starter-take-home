@@ -14,7 +14,6 @@ export const peopleQueries = {
     queryOptions({
       queryKey: [...peopleQueries.details(), id],
       queryFn: () => getProvider().people.getOneById(id),
-      staleTime: 5000,
     }),
 };
 export const movieQueries = {

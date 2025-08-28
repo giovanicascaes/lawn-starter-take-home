@@ -1,3 +1,4 @@
+import { QueryClientProvider } from '@tanstack/react-query';
 import { createContext } from 'react';
 import { isServer } from '~/lib/utils/utils';
 import { provider } from './provider';
@@ -27,7 +28,9 @@ export const ServiceProvider = ({
 }) => {
   return (
     <ProviderContext.Provider value={getProvider()}>
-      {children}
+      <QueryClientProvider client={getProvider().query}>
+        {children}
+      </QueryClientProvider>
     </ProviderContext.Provider>
   );
 };

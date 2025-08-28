@@ -1,4 +1,3 @@
-import { QueryClientProvider } from '@tanstack/react-query';
 import {
   isRouteErrorResponse,
   Links,
@@ -7,10 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from 'react-router';
-import {
-  getProvider,
-  ServiceProvider,
-} from '~/services/provider/provider.context';
+import { ServiceProvider } from '~/services/provider/provider.context';
 import type { Route } from './+types/app-layout';
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
@@ -58,11 +54,9 @@ export default function AppLayout() {
               <span className="text-[9px] font-bold text-brand">SWStarter</span>
             </header>
             <div className="flex flex-1 flex-col items-center w-full px-[119px] py-[15px] bg-[#ededed]">
-              <QueryClientProvider client={getProvider().query}>
-                <ServiceProvider>
-                  <Outlet />
-                </ServiceProvider>
-              </QueryClientProvider>
+              <ServiceProvider>
+                <Outlet />
+              </ServiceProvider>
             </div>
           </div>
         </main>
