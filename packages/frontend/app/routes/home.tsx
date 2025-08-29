@@ -33,14 +33,12 @@ export async function clientLoader() {
     } catch {
       return {
         ok: false,
+        search,
+        searchType,
       };
     }
   }
   return null;
-}
-
-export function HydrateFallback() {
-  return <span className="text-[9px] font-bold text-black">Loading...</span>;
 }
 
 export default function Home() {
