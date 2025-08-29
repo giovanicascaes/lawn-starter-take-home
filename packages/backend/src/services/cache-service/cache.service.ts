@@ -6,7 +6,10 @@ export class CacheService implements ICacheService {
   private cache: NodeCache;
 
   constructor(config: ICacheConfig = { ttl: 300, checkperiod: 600 }) {
-    this.cache = new NodeCache(config);
+    this.cache = new NodeCache({
+      stdTTL: config.ttl,
+      checkperiod: config.checkperiod,
+    });
   }
 
   /**
