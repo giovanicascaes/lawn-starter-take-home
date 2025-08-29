@@ -5,7 +5,7 @@ import type {
 } from './statistics.types';
 
 export class StatisticsService implements IStatisticsService {
-  private static DEFAULT_RECOMPUTATION_INTERVAL_MS = 5 * 60 * 100; // 5 minutes
+  private static DEFAULT_RECOMPUTATION_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
   private requestCounts: Map<string, number> = new Map();
   private totalRequests: number = 0;
   private recomputationInterval: number;
