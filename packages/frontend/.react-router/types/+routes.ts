@@ -33,8 +33,8 @@ type RouteFiles = {
     id: "root";
     page: "/" | "/movie/:id" | "/people/:id" | "/search";
   };
-  "layouts/app-layout/app-layout.tsx": {
-    id: "layouts/app-layout/app-layout";
+  "routes/layout.tsx": {
+    id: "routes/layout";
     page: "/" | "/movie/:id" | "/people/:id" | "/search";
   };
   "routes/home.tsx": {
