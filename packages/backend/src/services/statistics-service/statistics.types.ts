@@ -4,12 +4,10 @@ export interface ITopRequest {
   percentage: string;
 }
 
-export type ITopRequestsResponse = ITopRequest[];
-
 export interface IRequestStats {
   totalRequests: number;
   uniqueEndpoints: number;
-  topRequests: ITopRequestsResponse;
+  topRequests: ITopRequest[];
   lastUpdated: string;
   nextRecomputation: string;
 }
