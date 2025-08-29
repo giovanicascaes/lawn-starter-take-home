@@ -14,8 +14,7 @@ export function createApiRouter(
 ): Router {
   const router = Router();
 
-  // Apply request tracking middleware to all routes
-  router.use(createRequestTracker(statisticsService));
+  const trackRequest = createRequestTracker(statisticsService);
 
   // Health check endpoint
   router.get('/health', async (req: Request, res: Response<IApiResponse>) => {
@@ -30,18 +29,25 @@ export function createApiRouter(
     });
   });
 
-  router.get('/people', async (req: Request, res: Response<IApiResponse>) => {
-    const data = await apiProvider.people.getList(req.query.search as string);
+  router.get(
+    '/people',
+    trackRequest,
+    async (req: Request, res: Response<IApiResponse>) => {
+      const data = await apiProvider.people.getList(
+        req.query.search as string | undefined
+      );
 
-    res.json({
-      success: true,
-      data,
-      message: 'Data retrieved successfully',
-    });
-  });
+      res.json({
+        success: true,
+        data,
+        message: 'Data retrieved successfully',
+      });
+    }
+  );
 
   router.get(
     '/people/:id',
+    trackRequest,
     async (req: Request, res: Response<IApiResponse>) => {
       const data = await apiProvider.people.getOneById(
         Number(req.params['id'])
@@ -55,18 +61,25 @@ export function createApiRouter(
     }
   );
 
-  router.get('/movies', async (req: Request, res: Response<IApiResponse>) => {
-    const data = await apiProvider.movie.getList(req.query.search as string);
+  router.get(
+    '/movies',
+    trackRequest,
+    async (req: Request, res: Response<IApiResponse>) => {
+      const data = await apiProvider.movie.getList(
+        req.query.search as string | undefined
+      );
 
-    res.json({
-      success: true,
-      data,
-      message: 'Data retrieved successfully',
-    });
-  });
+      res.json({
+        success: true,
+        data,
+        message: 'Data retrieved successfully',
+      });
+    }
+  );
 
   router.get(
     '/movies/:id',
+    trackRequest,
     async (req: Request, res: Response<IApiResponse>) => {
       const data = await apiProvider.movie.getOneById(Number(req.params['id']));
 
@@ -111,8 +124,10 @@ export function createApiRouter(
     async (_req: Request, res: Response<IApiResponse>) => {
       res.json({
         success: true,
-        data: statisticsService.getTopRequests(),
-        message: 'Top 5 requests statistics retrieved',
+        data: statisticsService.stats,
+        message: statisticsService.stats
+          ? 'Top 5 requests statistics retrieved'
+          : 'Not enough requests to compute statistics',
       });
     }
   );

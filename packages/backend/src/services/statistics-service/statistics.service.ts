@@ -1,17 +1,21 @@
 import type {
   IRequestStats,
   IStatisticsService,
-  ITopRequestsResponse,
+  ITopRequest,
 } from './statistics.types';
 
-const RECOMPUTATION_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
-
 export class StatisticsService implements IStatisticsService {
+  private static DEFAULT_RECOMPUTATION_INTERVAL_MS = 5 * 60 * 100; // 5 minutes
   private requestCounts: Map<string, number> = new Map();
   private totalRequests: number = 0;
-  private recomputationInterval: NodeJS.Timeout | null = null;
+  private recomputationInterval: number;
+  private intervalTimeout: NodeJS.Timeout | null = null;
+  private _stats: IRequestStats | null = null;
 
-  constructor() {
+  constructor(
+    interval: number = StatisticsService.DEFAULT_RECOMPUTATION_INTERVAL_MS
+  ) {
+    this.recomputationInterval = interval;
     this.startPeriodicRecomputation();
   }
 
@@ -25,9 +29,9 @@ export class StatisticsService implements IStatisticsService {
   }
 
   /**
-   * Get the top 5 requests with percentages
+   * Return the top 5 requests with percentages
    */
-  public getTopRequests(): ITopRequestsResponse {
+  private computeTopRequests(): ITopRequest[] {
     const sortedRequests = Array.from(this.requestCounts.entries())
       .sort(([, a], [, b]) => b - a)
       .slice(0, 5)
@@ -40,41 +44,39 @@ export class StatisticsService implements IStatisticsService {
             : '0.00',
       }));
 
-    return {
-      topRequests: sortedRequests,
-      totalRequests: this.totalRequests,
-      lastUpdated: new Date().toISOString(),
-      nextRecomputation: this.getNextRecomputationTime(),
-    };
+    return sortedRequests;
   }
 
   /**
    * Get current statistics
    */
-  public getStats(): IRequestStats {
-    return {
-      totalRequests: this.totalRequests,
-      uniqueEndpoints: this.requestCounts.size,
-      topRequests: this.getTopRequests(),
-      lastUpdated: new Date().toISOString(),
-    };
+  public get stats(): IRequestStats | null {
+    return this._stats;
+  }
+
+  /**
+   * Reset the request counts
+   */
+  public resetCounts(): void {
+    this.requestCounts.clear();
+    this.totalRequests = 0;
   }
 
   /**
    * Reset all statistics
    */
   public resetStats(): void {
-    this.requestCounts.clear();
-    this.totalRequests = 0;
+    this.resetCounts();
+    this._stats = null;
   }
 
   /**
    * Start periodic recomputation of statistics
    */
   private startPeriodicRecomputation(): void {
-    this.recomputationInterval = setInterval(() => {
+    this.intervalTimeout = setInterval(() => {
       this.recomputeStatistics();
-    }, RECOMPUTATION_INTERVAL_MS);
+    }, this.recomputationInterval);
 
     // Ensure cleanup on process exit
     process.on('exit', () => {
@@ -91,6 +93,25 @@ export class StatisticsService implements IStatisticsService {
   }
 
   /**
+   * Update the statistics
+   */
+  private updateStats(): void {
+    if (this.totalRequests === 0) {
+      return;
+    }
+
+    this._stats = {
+      totalRequests: this.totalRequests,
+      uniqueEndpoints: this.requestCounts.size,
+      topRequests: this.computeTopRequests(),
+      lastUpdated: new Date().toISOString(),
+      nextRecomputation: new Date(
+        new Date().getTime() + this.recomputationInterval
+      ).toISOString(),
+    };
+  }
+
+  /**
    * Recompute statistics (called every 5 minutes)
    */
   private recomputeStatistics(): void {
@@ -102,33 +123,33 @@ export class StatisticsService implements IStatisticsService {
     // 3. Generate reports
     // 4. Trigger alerts if certain thresholds are met
 
-    const stats = this.getTopRequests();
-    console.log('📈 Current top requests:', stats.topRequests);
-  }
-
-  /**
-   * Get the next recomputation time
-   */
-  private getNextRecomputationTime(): string {
-    const now = new Date();
-    const next = new Date(now.getTime() + RECOMPUTATION_INTERVAL_MS);
-    return next.toISOString();
+    this.updateStats();
+    this.resetCounts();
+    console.log('📈 Current stats:', this.stats);
   }
 
   /**
    * Cleanup resources
    */
   private cleanup(): void {
-    if (this.recomputationInterval) {
-      clearInterval(this.recomputationInterval);
-      this.recomputationInterval = null;
+    if (this.intervalTimeout) {
+      clearInterval(this.intervalTimeout);
+      this.intervalTimeout = null;
+      this.resetStats();
     }
   }
 
   /**
-   * Stop the service (useful for testing)
+   * Stop the service
    */
   public stop(): void {
     this.cleanup();
+  }
+
+  /**
+   * Start the service
+   */
+  public start() {
+    this.startPeriodicRecomputation();
   }
 }
