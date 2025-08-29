@@ -9,14 +9,6 @@ export class CacheService implements ICacheService {
     this.cache = new NodeCache(config);
   }
 
-  del(key: string): void {
-    throw new Error('Method not implemented.');
-  }
-
-  flushAll(): void {
-    throw new Error('Method not implemented.');
-  }
-
   /**
    * Get a value from cache
    */
